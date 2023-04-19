@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: news-scraper-service
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    date-format: yyyy-MM-dd
+  jooq:
+    sql-dialect: org.hibernate.dialect.PostgreSQL95Dialect
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    generate-ddl: true
+  flyway:
+    url: ${SPRING_DATASOURCE_URL}
+    locations: /db/migration
+    enabled: true
+    password: ${POSTGRES_PASSWORD}
+    schemas: public
+    user: ${POSTGRES_USER}
+    encoding: UTF-8
+    baseline-on-migrate: true
+  kafka:
+    bootstrap-servers: kafka:9092
+
+
+logging:
+  level:
+    root: error
+    org.hibernate: error
+    org.apache.kafka: error
+
+
+
