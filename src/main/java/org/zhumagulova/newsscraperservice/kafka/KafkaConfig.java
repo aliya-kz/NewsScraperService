@@ -31,6 +31,7 @@ public class KafkaConfig {
                 StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG,
                 JsonSerializer.class);
+        props.put(JsonSerializer.TYPE_MAPPINGS, "news:org.zhumagulova.newsscraperservice.entity.News");
         return props;
     }
 
@@ -46,7 +47,6 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic topic() {
-
         return TopicBuilder.name("tengri-news").build();
     }
 }

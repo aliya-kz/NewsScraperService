@@ -1,5 +1,6 @@
 package org.zhumagulova.newsscraperservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "news")
 public class News {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "news_seq_gen")
     @SequenceGenerator(name = "news_seq_gen", sequenceName = "news_sequence", allocationSize = 1)
@@ -23,9 +25,12 @@ public class News {
     private String title;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    @Column(name = "content", length = 8000)
+    @Column(name = "content", length = 2048)
     private String content;
+
+    @JsonIgnore
     private String articleLink;
+
     public News(String title, LocalDate date, String content, String articleLink) {
         this.title = title;
         this.date = date;

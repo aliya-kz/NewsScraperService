@@ -31,9 +31,9 @@ spring:
 
 logging:
   level:
-    root: error
-    org.hibernate: error
-    org.apache.kafka: error
+    root: debug
+    org.hibernate: debug
+    org.apache.kafka: debug
 
 
 

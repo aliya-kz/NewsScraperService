@@ -33,7 +33,7 @@ public class TengrinewsScraperService implements NewsScraperService {
 
     @Override
     @Transactional
-    @Scheduled(cron = "0 * * ? 4-6 * ")
+    @Scheduled(cron = "0 */2 * * * *")
     public void scrape() throws ScraperException {
         try {
             Document document = Jsoup.connect(KAZAKHSTAN_NEWS_PAGE_URL).get();
@@ -54,6 +54,9 @@ public class TengrinewsScraperService implements NewsScraperService {
                             contentBuilder.append(paragraphs.get(i));
                         }
                         String content = contentBuilder.toString();
+                        if (content.length()>2048) {
+                            content = content.substring(0,2047);
+                        }
                         News news = newsMapper.map(title, postDate, content, articleLink);
                         newsList.add(news);
                         kafkaSender.sendMessage (news, "tengri-news");
