@@ -25,15 +25,16 @@ spring:
     user: ${POSTGRES_USER}
     encoding: UTF-8
     baseline-on-migrate: true
-  kafka:
-    bootstrap-servers: kafka:9092
 
 
 logging:
   level:
     root: debug
     org.hibernate: debug
-    org.apache.kafka: debug
+
+
+
+
 
 
 

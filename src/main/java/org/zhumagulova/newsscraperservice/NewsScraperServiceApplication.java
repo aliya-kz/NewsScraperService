@@ -27,4 +27,5 @@ public class NewsScraperServiceApplication implements CommandLineRunner {
     public void run(String... args) throws ScraperException {
         newsScraperService.scrape();
     }
+
 }

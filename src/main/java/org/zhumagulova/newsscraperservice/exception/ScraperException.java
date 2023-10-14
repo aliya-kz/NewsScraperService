@@ -6,7 +6,6 @@ import java.io.IOException;
 
 @Slf4j
 public class ScraperException extends Exception {
-
     public ScraperException(String message, IOException e) {
         super(e);
     }
