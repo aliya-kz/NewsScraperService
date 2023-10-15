@@ -7,12 +7,14 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientRequestException;
 import org.zhumagulova.newsscraperservice.api.model.NewsResponse;
 import org.zhumagulova.newsscraperservice.entity.News;
 import org.zhumagulova.newsscraperservice.exception.ScraperException;
@@ -21,6 +23,8 @@ import org.zhumagulova.newsscraperservice.service.mapper.NewsMapper;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.net.ConnectException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,15 +95,15 @@ public class TengrinewsScraperService implements NewsScraperService {
     }
 
     public void connectToNewsPortalUsingWebClient() {
-        try {
-            WebClient client = WebClient.builder().baseUrl(NEWS_PORTAL_URL).build();
-            Mono<NewsResponse> response = client.get()
-                    .retrieve()
-                    .bodyToMono(NewsResponse.class);
-            log.debug("response title " + response.block().getTitle());
-        } catch (Exception exception) {
-            throw new ResourceAccessException("NewsPortal is not running");
-        }
+        WebClient client = WebClient.builder().baseUrl(NEWS_PORTAL_URL).build();
+        NewsResponse response = client.get()
+                .retrieve()
+                .bodyToMono(NewsResponse.class)
+                .onErrorMap(throwable -> throwable instanceof WebClientRequestException, throwable -> { //TODO more specific exception
+                    throw new ResourceAccessException("News server is down");
+                })
+                .block();
+        log.debug("response title " + response.getTitle());
     }
 }
 
